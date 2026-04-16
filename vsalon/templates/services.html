@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Our Services{% endblock %}
+{% block content %}
+<section class="hero" style="padding:4rem 2rem">
+    <h1>Our <span>Services</span></h1>
+    <p>Choose from our wide range of premium beauty and wellness treatments</p>
+</section>
+<section class="section">
+    <div class="grid grid-3">
+        {% for service in services %}
+        <div class="card">
+            <div class="service-card-img">
+                {% if service.category == 'Hair' %}💇{% elif service.category == 'Nails' %}💅{% elif service.category == 'Skin' %}✨{% elif service.category == 'Face' %}🧖{% else %}💆{% endif %}
+            </div>
+            <div class="card-body">
+                <span class="card-badge badge-confirmed">{{ service.category }}</span>
+                <h3 class="card-title mt-1">{{ service.name }}</h3>
+                <p class="card-text">{{ service.description }}</p>
+                <div class="flex-between mt-2">
+                    <span class="card-price">₱{{ "%.2f"|format(service.price) }}</span>
+                    <span class="card-text">{{ service.duration_minutes }} min</span>
+                </div>
+                <a href="{{ url_for('book_appointment') }}" class="btn btn-primary mt-2" style="width:100%;justify-content:center">Book Now</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

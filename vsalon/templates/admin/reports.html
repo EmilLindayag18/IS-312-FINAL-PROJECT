@@ -1,0 +1,62 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Reports{% endblock %}
+{% block content %}
+<div class="page-header"><h1>Reports & Analytics</h1></div>
+
+<h3 class="mb-2">Daily Sales (Last 7 Days)</h3>
+<div class="table-container mb-3">
+    <table>
+        <thead><tr><th>Date</th><th>Transactions</th><th>Revenue</th></tr></thead>
+        <tbody>
+        {% for d in daily_sales %}
+        <tr><td>{{ d.date }}</td><td>{{ d.count }}</td><td>₱{{ "%.2f"|format(d.total) }}</td></tr>
+        {% endfor %}
+        {% if not daily_sales %}<tr><td colspan="3" class="text-center" style="color:var(--text-light);padding:2rem">No sales data yet</td></tr>{% endif %}
+        </tbody>
+    </table>
+</div>
+
+<div class="grid grid-2">
+    <div>
+        <h3 class="mb-2">Service Performance</h3>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Service</th><th>Bookings</th><th>Revenue</th></tr></thead>
+                <tbody>
+                {% for s in service_stats %}
+                <tr><td>{{ s.name }}</td><td>{{ s.bookings }}</td><td>₱{{ "%.2f"|format(s.revenue) }}</td></tr>
+                {% endfor %}
+                {% if not service_stats %}<tr><td colspan="3" class="text-center" style="color:var(--text-light);padding:2rem">No data yet</td></tr>{% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <h3 class="mb-2">Product Sales</h3>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Product</th><th>Sold</th><th>Revenue</th></tr></thead>
+                <tbody>
+                {% for p in product_stats %}
+                <tr><td>{{ p.name }}</td><td>{{ p.sold }}</td><td>₱{{ "%.2f"|format(p.revenue) }}</td></tr>
+                {% endfor %}
+                {% if not product_stats %}<tr><td colspan="3" class="text-center" style="color:var(--text-light);padding:2rem">No data yet</td></tr>{% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<h3 class="mb-2 mt-3">Monthly Revenue</h3>
+<div class="table-container">
+    <table>
+        <thead><tr><th>Month</th><th>Total Revenue</th></tr></thead>
+        <tbody>
+        {% for m in monthly_revenue %}
+        <tr><td>{{ m.month }}</td><td>₱{{ "%.2f"|format(m.total) }}</td></tr>
+        {% endfor %}
+        {% if not monthly_revenue %}<tr><td colspan="2" class="text-center" style="color:var(--text-light);padding:2rem">No data yet</td></tr>{% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

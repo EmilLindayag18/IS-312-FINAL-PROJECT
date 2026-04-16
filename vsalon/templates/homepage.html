@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero">
+    <h1>Elevate Your <span>Beauty</span></h1>
+    <p>Experience premium salon services tailored just for you. Book your appointment today and let our expert stylists transform your look.</p>
+    <div class="flex gap-2" style="justify-content:center">
+        <a href="{{ url_for('book_appointment') }}" class="btn btn-gold btn-lg">Book Appointment</a>
+        <a href="{{ url_for('services_page') }}" class="btn btn-outline btn-lg" style="border-color:var(--gold);color:var(--gold)">Our Services</a>
+    </div>
+</section>
+
+<section class="section">
+    <h2 class="section-title">Our Services</h2>
+    <p class="section-subtitle">Professional treatments to help you look and feel your best</p>
+    <div class="grid grid-3">
+        {% for service in services %}
+        <div class="card">
+            <div class="service-card-img">💇</div>
+            <div class="card-body">
+                <span class="card-badge badge-confirmed">{{ service.category }}</span>
+                <h3 class="card-title mt-1">{{ service.name }}</h3>
+                <p class="card-text">{{ service.description }}</p>
+                <div class="flex-between mt-2">
+                    <span class="card-price">₱{{ "%.2f"|format(service.price) }}</span>
+                    <span class="card-text">{{ service.duration_minutes }} min</span>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <div class="text-center mt-3">
+        <a href="{{ url_for('services_page') }}" class="btn btn-outline">View All Services →</a>
+    </div>
+</section>
+
+<section style="background:linear-gradient(135deg,var(--accent-light),var(--bg));padding:5rem 2rem">
+    <div style="max-width:1200px;margin:0 auto">
+        <h2 class="section-title">Shop Our Products</h2>
+        <p class="section-subtitle">Premium salon-quality products for your daily care routine</p>
+        <div class="grid grid-4">
+            {% for product in products %}
+            <div class="card">
+                <div class="product-card-img">🧴</div>
+                <div class="card-body">
+                    <span class="card-badge badge-confirmed">{{ product.category }}</span>
+                    <h3 class="card-title mt-1">{{ product.name }}</h3>
+                    <p class="card-text">{{ product.description[:60] }}...</p>
+                    <div class="card-price mt-1">₱{{ "%.2f"|format(product.price) }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('shop') }}" class="btn btn-primary">Browse Shop →</a>
+        </div>
+    </div>
+</section>
+
+<section class="section text-center">
+    <h2 class="section-title">Why Choose VSalon?</h2>
+    <p class="section-subtitle">We bring the best beauty experience to you</p>
+    <div class="grid grid-3">
+        <div class="card" style="text-align:center">
+            <div class="card-body">
+                <div style="font-size:2.5rem;margin-bottom:1rem">✨</div>
+                <h3 class="card-title">Expert Stylists</h3>
+                <p class="card-text">Our team of certified professionals ensures you get the best treatment every visit.</p>
+            </div>
+        </div>
+        <div class="card" style="text-align:center">
+            <div class="card-body">
+                <div style="font-size:2.5rem;margin-bottom:1rem">📅</div>
+                <h3 class="card-title">Easy Booking</h3>
+                <p class="card-text">Book your preferred time slot online with real-time availability checking.</p>
+            </div>
+        </div>
+        <div class="card" style="text-align:center">
+            <div class="card-body">
+                <div style="font-size:2.5rem;margin-bottom:1rem">💎</div>
+                <h3 class="card-title">Premium Products</h3>
+                <p class="card-text">We use only top-quality products to give you results that last.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

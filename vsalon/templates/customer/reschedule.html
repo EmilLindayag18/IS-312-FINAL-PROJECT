@@ -1,0 +1,21 @@
+{% extends "customer/base_customer.html" %}
+{% block title %}Reschedule{% endblock %}
+{% block content %}
+<div class="page-header"><h1>Reschedule Appointment</h1></div>
+<div class="card" style="max-width:500px"><div class="card-body">
+    <p class="mb-2"><strong>Service:</strong> {{ appointment.service_name }}</p>
+    <form method="POST">
+        <div class="form-group"><label>New Date</label><input type="date" name="appointment_date" class="form-control" required></div>
+        <div class="form-group">
+            <label>New Time</label>
+            <select name="appointment_time" class="form-control" required>
+                {% for h in range(9, 18) %}
+                <option value="{{ '%02d:00'|format(h) }}">{{ '%02d:00'|format(h) }}</option>
+                <option value="{{ '%02d:30'|format(h) }}">{{ '%02d:30'|format(h) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width:100%;justify-content:center">Confirm Reschedule</button>
+    </form>
+</div></div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends "customer/base_customer.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<div class="page-header">
+    <h1>Welcome, {{ session.user_name }}!</h1>
+    <a href="{{ url_for('book_appointment') }}" class="btn btn-gold">Book Appointment</a>
+</div>
+
+<h3 class="mb-2">Your Appointments</h3>
+<div class="table-container mb-3">
+    <table>
+        <thead><tr><th>Service</th><th>Date</th><th>Time</th><th>Staff</th><th>Price</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody>
+        {% for a in appointments %}
+        <tr>
+            <td>{{ a.service_name }}</td>
+            <td>{{ a.appointment_date }}</td>
+            <td>{{ a.appointment_time }}</td>
+            <td>{{ a.staff_name or 'Any available' }}</td>
+            <td>₱{{ "%.2f"|format(a.price) }}</td>
+            <td><span class="card-badge badge-{{ a.status }}">{{ a.status }}</span></td>
+            <td>
+                {% if a.status in ['pending', 'confirmed', 'rescheduled'] %}
+                <div class="flex gap-1">
+                    <a href="{{ url_for('reschedule_appointment', appointment_id=a.id) }}" class="btn btn-sm btn-outline">Reschedule</a>
+                    <a href="{{ url_for('cancel_appointment', appointment_id=a.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Cancel this appointment?')">Cancel</a>
+                </div>
+                {% else %}-{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        {% if not appointments %}<tr><td colspan="7" class="text-center" style="padding:2rem;color:var(--text-light)">No appointments yet. <a href="{{ url_for('book_appointment') }}">Book your first one!</a></td></tr>{% endif %}
+        </tbody>
+    </table>
+</div>
+
+<h3 class="mb-2">Recent Orders</h3>
+<div class="table-container">
+    <table>
+        <thead><tr><th>Order #</th><th>Items</th><th>Total</th><th>Payment</th><th>Status</th><th>Date</th></tr></thead>
+        <tbody>
+        {% for o in orders %}
+        <tr>
+            <td>#{{ o.id }}</td>
+            <td>{{ o.item_count }} item(s)</td>
+            <td>₱{{ "%.2f"|format(o.total_amount) }}</td>
+            <td>{{ o.payment_method }}</td>
+            <td><span class="card-badge badge-{{ o.status }}">{{ o.status }}</span></td>
+            <td>{{ o.created_at }}</td>
+        </tr>
+        {% endfor %}
+        {% if not orders %}<tr><td colspan="6" class="text-center" style="padding:2rem;color:var(--text-light)">No orders yet. <a href="{{ url_for('shop') }}">Browse our shop!</a></td></tr>{% endif %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

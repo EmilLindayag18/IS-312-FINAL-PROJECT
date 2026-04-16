@@ -1,0 +1,51 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Inventory{% endblock %}
+{% block content %}
+<div class="page-header"><h1>Inventory Management</h1></div>
+<div class="grid grid-2">
+    <div>
+        <h3 class="mb-2">Stock Levels</h3>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Product</th><th>Stock</th><th>Threshold</th><th>Adjust</th></tr></thead>
+                <tbody>
+                {% for p in products %}
+                <tr {% if p.stock_quantity <= p.low_stock_threshold %}style="background:#FFF3CD"{% endif %}>
+                    <td>{{ p.name }}</td>
+                    <td>{% if p.stock_quantity <= p.low_stock_threshold %}<strong style="color:var(--danger)">{{ p.stock_quantity }} ⚠️</strong>{% else %}{{ p.stock_quantity }}{% endif %}</td>
+                    <td>{{ p.low_stock_threshold }}</td>
+                    <td>
+                        <form method="POST" action="{{ url_for('update_stock', product_id=p.id) }}" class="flex gap-1">
+                            <input type="number" name="quantity" class="form-control" style="width:70px;padding:0.3rem" placeholder="+/-">
+                            <input type="hidden" name="reason" value="Manual restock">
+                            <button class="btn btn-primary btn-sm">Update</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div>
+        <h3 class="mb-2">Recent Inventory Changes</h3>
+        <div class="table-container">
+            <table>
+                <thead><tr><th>Product</th><th>Change</th><th>Reason</th><th>Date</th></tr></thead>
+                <tbody>
+                {% for log in logs %}
+                <tr>
+                    <td>{{ log.name }}</td>
+                    <td style="color:{% if log.change_quantity > 0 %}var(--success){% else %}var(--danger){% endif %};font-weight:600">
+                        {{ '+' if log.change_quantity > 0 }}{{ log.change_quantity }}
+                    </td>
+                    <td>{{ log.reason }}</td>
+                    <td>{{ log.created_at }}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

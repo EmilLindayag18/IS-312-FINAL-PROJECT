@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}VSalon{% endblock %} | V-Salon Management</title>
+    <meta name="description" content="VSalon - Premium Salon Management System. Book appointments, shop products, and manage your salon experience.">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💇</text></svg>">
+    {% block head %}{% endblock %}
+</head>
+<body>
+    {% block navbar %}
+    <nav class="navbar">
+        <a href="{{ url_for('home') }}" class="navbar-brand">V<span>Salon</span></a>
+        <ul class="nav-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('services_page') }}">Services</a></li>
+            <li><a href="{{ url_for('shop') }}">Shop</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            {% if session.get('user_id') %}
+                {% if session.get('role') == 'admin' %}
+                    <li><a href="{{ url_for('admin_dashboard') }}" class="btn btn-sm btn-primary">Dashboard</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('customer_dashboard') }}" class="btn btn-sm btn-primary">My Account</a></li>
+                {% endif %}
+                <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ url_for('login') }}" class="btn btn-sm btn-outline">Log In</a></li>
+                <li><a href="{{ url_for('register') }}" class="btn btn-sm btn-primary">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endblock %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+    <div class="flash-messages">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    {% block footer %}
+    <footer class="footer">
+        <div class="footer-brand">V<span>Salon</span></div>
+        <p>Premium Beauty & Wellness Experience</p>
+        <ul class="footer-links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('services_page') }}">Services</a></li>
+            <li><a href="{{ url_for('shop') }}">Shop</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+        </ul>
+        <p>&copy; 2025 VSalon. All rights reserved.</p>
+    </footer>
+    {% endblock %}
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

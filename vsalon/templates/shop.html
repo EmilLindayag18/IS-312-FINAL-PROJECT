@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Shop{% endblock %}
+{% block content %}
+<section class="hero" style="padding:4rem 2rem">
+    <h1>Product <span>Shop</span></h1>
+    <p>Premium salon-quality products for your daily beauty routine</p>
+</section>
+<section class="section">
+    <div class="filter-bar">
+        <a href="{{ url_for('shop') }}" class="filter-btn {% if not selected_category %}active{% endif %}">All</a>
+        {% for cat in categories %}
+        <a href="{{ url_for('shop', category=cat) }}" class="filter-btn {% if selected_category == cat %}active{% endif %}">{{ cat }}</a>
+        {% endfor %}
+    </div>
+    <div class="grid grid-4">
+        {% for product in products %}
+        <div class="card">
+            <div class="product-card-img">🧴</div>
+            <div class="card-body">
+                <span class="card-badge badge-confirmed">{{ product.category }}</span>
+                <h3 class="card-title mt-1">{{ product.name }}</h3>
+                <p class="card-text">{{ product.description }}</p>
+                <div class="card-price mt-1">₱{{ "%.2f"|format(product.price) }}</div>
+                <p class="card-text">Stock: {{ product.stock_quantity }}</p>
+                {% if session.get('user_id') %}
+                <form method="POST" action="{{ url_for('buy_product', product_id=product.id) }}" class="mt-2">
+                    <div class="flex gap-1">
+                        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock_quantity }}" class="form-control" style="width:70px">
+                        <button type="submit" class="btn btn-primary btn-sm" style="flex:1">Buy Now</button>
+                    </div>
+                </form>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn btn-outline btn-sm mt-2" style="width:100%;justify-content:center">Login to Buy</a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}

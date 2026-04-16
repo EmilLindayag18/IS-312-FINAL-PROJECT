@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} | VSalon Admin</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        <div class="sidebar-brand">V<span>Salon</span> Admin</div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-section">Overview</li>
+            <li><a href="{{ url_for('admin_dashboard') }}">📊 Dashboard</a></li>
+            <li class="sidebar-section">Management</li>
+            <li><a href="{{ url_for('admin_appointments') }}">📅 Appointments</a></li>
+            <li><a href="{{ url_for('admin_staff') }}">👥 Staff</a></li>
+            <li><a href="{{ url_for('admin_services') }}">✂️ Services</a></li>
+            <li class="sidebar-section">Products</li>
+            <li><a href="{{ url_for('admin_products') }}">📦 Products</a></li>
+            <li><a href="{{ url_for('admin_inventory') }}">📋 Inventory</a></li>
+            <li class="sidebar-section">Sales</li>
+            <li><a href="{{ url_for('admin_pos') }}">💰 POS</a></li>
+            <li><a href="{{ url_for('admin_reports') }}">📈 Reports</a></li>
+            <li class="sidebar-section">Account</li>
+            <li><a href="{{ url_for('home') }}">🏠 View Site</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages" style="padding:0;margin-bottom:1rem">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

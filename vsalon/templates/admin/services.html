@@ -1,0 +1,32 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Services{% endblock %}
+{% block content %}
+<div class="page-header"><h1>Service Management</h1></div>
+<div class="card mb-3"><div class="card-body">
+    <h3 class="card-title">Add New Service</h3>
+    <form method="POST" class="grid grid-3" style="align-items:end">
+        <div class="form-group"><label>Name</label><input type="text" name="name" class="form-control" required></div>
+        <div class="form-group"><label>Price (₱)</label><input type="number" name="price" step="0.01" class="form-control" required></div>
+        <div class="form-group"><label>Duration (min)</label><input type="number" name="duration_minutes" class="form-control" value="30"></div>
+        <div class="form-group"><label>Category</label><input type="text" name="category" class="form-control" placeholder="Hair, Nails, Skin..."></div>
+        <div class="form-group"><label>Description</label><input type="text" name="description" class="form-control"></div>
+        <div class="form-group"><button type="submit" class="btn btn-primary" style="width:100%">Add Service</button></div>
+    </form>
+</div></div>
+<div class="table-container">
+    <table>
+        <thead><tr><th>Name</th><th>Category</th><th>Duration</th><th>Price</th><th>Status</th></tr></thead>
+        <tbody>
+        {% for s in services %}
+        <tr>
+            <td><strong>{{ s.name }}</strong><br><small style="color:var(--text-light)">{{ s.description }}</small></td>
+            <td>{{ s.category }}</td>
+            <td>{{ s.duration_minutes }} min</td>
+            <td>₱{{ "%.2f"|format(s.price) }}</td>
+            <td><span class="card-badge {% if s.is_active %}badge-confirmed{% else %}badge-cancelled{% endif %}">{{ 'Active' if s.is_active else 'Inactive' }}</span></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

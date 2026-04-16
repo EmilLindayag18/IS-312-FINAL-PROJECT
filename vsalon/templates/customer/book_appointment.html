@@ -1,0 +1,65 @@
+{% extends "customer/base_customer.html" %}
+{% block title %}Book Appointment{% endblock %}
+{% block content %}
+<div class="page-header"><h1>Book an Appointment</h1></div>
+<div class="card" style="max-width:600px"><div class="card-body">
+    <form method="POST">
+        <div class="form-group">
+            <label>Select Service</label>
+            <select name="service_id" class="form-control" required>
+                <option value="">Choose a service...</option>
+                {% for s in services %}
+                <option value="{{ s.id }}">{{ s.name }} - ₱{{ "%.2f"|format(s.price) }} ({{ s.duration_minutes }} min)</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Preferred Staff (optional)</label>
+            <select name="staff_id" class="form-control" id="staffSelect">
+                <option value="">Any available staff</option>
+                {% for s in staff %}
+                <option value="{{ s.id }}">{{ s.full_name }} - {{ s.specialization }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Preferred Date</label>
+            <input type="date" name="appointment_date" class="form-control" id="dateInput" required min="{{ now if now else '' }}">
+        </div>
+        <div class="form-group">
+            <label>Preferred Time</label>
+            <select name="appointment_time" class="form-control" id="timeSelect" required>
+                <option value="">Select date first</option>
+                {% for h in range(9, 18) %}
+                <option value="{{ '%02d:00'|format(h) }}">{{ '%02d:00'|format(h) }}</option>
+                <option value="{{ '%02d:30'|format(h) }}">{{ '%02d:30'|format(h) }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Notes (optional)</label>
+            <textarea name="notes" class="form-control" placeholder="Any special requests..."></textarea>
+        </div>
+        <button type="submit" class="btn btn-gold btn-lg" style="width:100%;justify-content:center">Confirm Booking</button>
+    </form>
+</div></div>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('dateInput').addEventListener('change', function() {
+    const date = this.value;
+    const staffId = document.getElementById('staffSelect').value;
+    if (date && staffId) {
+        fetch(`/api/check_availability?date=${date}&staff_id=${staffId}`)
+            .then(r => r.json())
+            .then(data => {
+                const sel = document.getElementById('timeSelect');
+                sel.innerHTML = '<option value="">Select a time</option>';
+                data.available.forEach(t => {
+                    sel.innerHTML += `<option value="${t}">${t}</option>`;
+                });
+            });
+    }
+});
+</script>
+{% endblock %}

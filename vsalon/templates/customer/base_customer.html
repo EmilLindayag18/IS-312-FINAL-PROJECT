@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Account{% endblock %} | VSalon</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="dashboard-layout">
+    <aside class="sidebar">
+        <div class="sidebar-brand">V<span>Salon</span></div>
+        <ul class="sidebar-nav">
+            <li class="sidebar-section">My Account</li>
+            <li><a href="{{ url_for('customer_dashboard') }}">📊 Dashboard</a></li>
+            <li><a href="{{ url_for('customer_profile') }}">👤 Profile</a></li>
+            <li class="sidebar-section">Appointments</li>
+            <li><a href="{{ url_for('book_appointment') }}">📅 Book Now</a></li>
+            <li><a href="{{ url_for('customer_appointments') }}">📋 My Appointments</a></li>
+            <li class="sidebar-section">Shopping</li>
+            <li><a href="{{ url_for('shop') }}">🛒 Shop Products</a></li>
+            <li class="sidebar-section">Account</li>
+            <li><a href="{{ url_for('home') }}">🏠 Home</a></li>
+            <li><a href="{{ url_for('logout') }}">🚪 Logout</a></li>
+        </ul>
+    </aside>
+    <main class="main-content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div style="margin-bottom:1rem">
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>
